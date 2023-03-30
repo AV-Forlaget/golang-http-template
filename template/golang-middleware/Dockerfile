@@ -36,8 +36,10 @@ RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
 
 FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:3.17.2 as ship
 
-# Add non root user and certs
-RUN apk --no-cache add ca-certificates \
+ARG ADDITIONAL_PKG=""
+
+# Add non root user and certs ans install optional addtitional packages
+RUN apk --no-cache add ca-certificates ${ADDITIONAL_PKG} \
     && addgroup -S app && adduser -S -g app app
 
 # Split instructions so that buildkit can run & cache
